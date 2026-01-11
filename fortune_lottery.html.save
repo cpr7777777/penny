@@ -1,0 +1,57 @@
+<!-- $1 Fortune Quiz Section -->
+<div id="fortune-section" style="text-align:center; margin:20px 0;">
+  <button id="startFortune" style="padding:15px 25px; font-size:18px;">$1 Fortune</button>
+</div>
+
+<!-- Multiple Choice Quiz (hidden initially) -->
+<div id="quiz-container" style="display:none; text-align:center; margin-top:10px;">
+  <p id="quiz-question" style="font-size:18px; font-weight:bold;">Which path calls to you today?</p>
+  <button class="fortune-choice" data-choice="A" style="padding:12px 20px; font-size:16px; margin:5px;">Adventure</button>
+  <button class="fortune-choice" data-choice="B" style="padding:12px 20px; font-size:16px; margin:5px;">Romance</button>
+  <button class="fortune-choice" data-choice="C" style="padding:12px 20px; font-size:16px; margin:5px;">Luck</button>
+  <button class="fortune-choice" data-choice="D" style="padding:12px 20px; font-size:16px; margin:5px;">Mystery</button>
+</div>
+
+<!-- Display fortune -->
+<div id="fortune-output" style="text-align:center; font-weight:bold; font-size:18px; margin-top:15px;"></div>
+
+<script>
+// Fortunes mapped to choices
+const quizFortunes = {
+  "A": "Adventure awaits! Try something new today.",
+  "B": "Love is in the air — reach out to someone special.",
+  "C": "Luck is on your side! Watch for opportunities.",
+  "D": "Mystery surrounds you — be curious and explore."
+};
+
+// Track if user "paid"
+let paid = false;
+
+document.getElementById("startFortune").onclick = () => {
+  window.open("https://www.paypal.com/paypalme/YOURNAME/1", "_blank");
+
+  const btn = document.getElementById("startFortune");
+  btn.disabled = true;
+  btn.textContent = "Processing payment...";
+
+  // Show quiz after 30 seconds
+  setTimeout(() => {
+    paid = true;
+    document.getElementById("quiz-container").style.display = "block";
+    btn.style.display = "none";
+    alert("Thanks! Now answer the question to reveal your fortune.");
+  }, 30000);
+};
+
+// Quiz button clicks
+document.querySelectorAll(".fortune-choice").forEach(button => {
+  button.onclick = () => {
+    if (!paid) {
+      alert("Please pay $1 first to see your fortune!");
+      return;
+    }
+    const choice = button.getAttribute("data-choice");
+    document.getElementById("fortune-output").textContent = quizFortunes[choice];
+  };
+});
+</script>
