@@ -25,7 +25,12 @@
   <h1>Nukey's Internal Monologue</h1>
   <p id="nukey-article">Initializing thoughts...</p>
 
-  <!-- Cache-busting query added to force browser to load latest JS -->
-  <script src="nukey.js?v=1"></script>
+  <!-- Inline loader to force nukey.js execution -->
+  <script>
+    const script = document.createElement('script');
+    script.src = 'nukey.js?v=' + Date.now(); // cache-busting
+    script.onload = () => console.log('Nukey script loaded and running!');
+    document.body.appendChild(script);
+  </script>
 </body>
 </html>
