@@ -26,6 +26,10 @@
   <p id="nukey-article">Initializing thoughts...</p>
 
   <script>
+    // Cache-busting: add a unique timestamp to ensure browser loads latest version
+    const cacheBuster = new Date().getTime();
+    console.log("Nukey script running. Cache-buster:", cacheBuster);
+
     const thoughts = [
       "Hmm… what am I thinking now?",
       "Did I remember that last input correctly?",
