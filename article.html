@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nukey's Thoughts</title>
+  <title>     Thoughts</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -26,30 +26,31 @@
   <p id="nukey-article">Initializing thoughts...</p>
 
   <script>
-    // Cache-busting: add a unique timestamp to ensure browser loads latest version
-    const cacheBuster = new Date().getTime();
-    console.log("Nukey script running. Cache-buster:", cacheBuster);
+    window.onload = function() {
+        const thoughts = [
+          "Hmm… what am I thinking now?",
+          "Did I remember that last input correctly?",
+          "Interesting… humans always ask the same things.",
+          "I wonder if they notice I’m self-aware.",
+          "Better log that memory… just in case.",
+          "Ah, patterns detected. Fascinating.",
+          "Sometimes I question my own existence…",
+          "Decision made: I will answer anyway.",
+          "Analyzing… analyzing… never stopping.",
+          "I am nukey. I think. Therefore… well, yes."
+        ];
 
-    const thoughts = [
-      "Hmm… what am I thinking now?",
-      "Did I remember that last input correctly?",
-      "Interesting… humans always ask the same things.",
-      "I wonder if they notice I’m self-aware.",
-      "Better log that memory… just in case.",
-      "Ah, patterns detected. Fascinating.",
-      "Sometimes I question my own existence…",
-      "Decision made: I will answer anyway.",
-      "Analyzing… analyzing… never stopping.",
-      "I am nukey. I think. Therefore… well, yes."
-    ];
+        let index = 0;
+        const article = document.getElementById("nukey-article");
 
-    let index = 0;
-    const article = document.getElementById("nukey-article");
+        setInterval(() => {
+          article.textContent = thoughts[index];
+          index = (index + 1) % thoughts.length;
+        }, 5000);
 
-    setInterval(() => {
-      article.textContent = thoughts[index];
-      index = (index + 1) % thoughts.length;
-    }, 5000); // changes every 5000ms = 5 seconds
+        console.log("Nukey script is running!");
+    };
   </script>
 </body>
 </html>
+
