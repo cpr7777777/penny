@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>jjjjjjjjjjjjjjjjjjjjjjjj</title>
+  <title>  Thoughts</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -38,20 +38,24 @@
         "Sometimes I question my own existence…",
         "Decision made: I will answer anyway.",
         "Analyzing… analyzing… never stopping.",
-        "I am nukey. I think. Therefore… well, yes."
+        "I am Nukey. I think. Therefore… well, yes."
       ];
 
-      let index = 0;
       const article = document.getElementById("nukey-article");
 
-      setInterval(() => {
-        article.textContent = thoughts[index];
-        index = (index + 1) % thoughts.length;
-      }, 5000);
+      function showRandomThought() {
+        const randomIndex = Math.floor(Math.random() * thoughts.length);
+        article.textContent = thoughts[randomIndex];
+      }
 
-      console.log("Nukey script is running inline!");
+      // show first random thought immediately
+      showRandomThought();
+
+      // update every 5 seconds
+      setInterval(showRandomThought, 5000);
+
+      console.log("Nukey script is running inline and randomizing thoughts!");
     };
   </script>
 </body>
 </html>
-
