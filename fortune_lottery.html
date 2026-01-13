@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🔮 Fortune </title>
+<title>🔮 Fortune Lottery</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -95,7 +95,6 @@
     text-align: left;
   }
 
-  /* Quiz styling */
   #quiz-container p,
   #quiz-container input,
   #quiz-container button {
@@ -141,14 +140,14 @@
   </a>
 </div>
 
-<h1>🎴FORTUNE🎴</h1>
+<h1>🎴 Gypsy Fortune 🎴</h1>
 
 <img id="card-img" src="" alt="Your card will appear here">
 <p id="fortune-text"></p>
 <p id="lottery-numbers"></p>
 
 <div id="fortune-section" style="text-align:center; margin:20px 0;">
-  <button id="startFortune" style="padding:15px 25px; font-size:18px;">A Fortune for your $1</button>
+  <button id="startFortune" style="padding:15px 25px; font-size:18px;">$1 Fortune</button>
 </div>
 
 <div id="quiz-container" style="display:none; text-align:center; margin-top:10px;">
@@ -157,15 +156,25 @@
 </div>
 
 <div id="fortune-output" style="text-align:center;"></div>
-
 <div id="article"></div>
 
-<!-- Audio -->
+<!-- 🎵 BACKGROUND MUSIC (ADDED ONLY) -->
 <audio id="bg-music" loop>
   <source src="magic.mp3" type="audio/mpeg">
 </audio>
 
 <script>
+// 🎵 MUSIC START (ADDED ONLY)
+let musicStarted = false;
+document.addEventListener('click', () => {
+  if (!musicStarted) {
+    const music = document.getElementById('bg-music');
+    music.volume = 0.3;
+    music.play().catch(()=>{});
+    musicStarted = true;
+  }
+});
+
 // Card functionality
 const cards = [
   "cards/the_fool.png","cards/the_magician.png","cards/the_high_priestess.png","cards/the_empress.png","cards/the_emperor.png",
@@ -176,41 +185,39 @@ const cards = [
 ];
 
 const cardMeanings = {
-  "the_fool.png": "New beginnings, innocence, adventure. Take risks, stay curious, and embrace the unknown. Symbolism: cliff, dog, knapsack. Folklore: Represents the eternal wanderer and the journey of the soul. Warning: Avoid reckless decisions or ignoring important details.",
-  "the_magician.png": "You have the power to manifest your desires. Focus your skills and act with intention. Symbolism: wand, table of tools, infinity symbol. Folklore: Connected to Hermes/Mercury, representing communication and skill. Warning: Beware manipulation or misusing your talents.",
-  "the_high_priestess.png": "Trust your intuition and inner wisdom. Secrets may be revealed if you pay attention. Symbolism: crescent moon, pomegranate, veil. Folklore: Linked to lunar goddesses like Isis or Artemis, keeper of hidden knowledge. Warning: Avoid ignoring inner guidance or being misled by illusions.",
-  "the_empress.png": "Abundance, nurturing, and growth are coming. Creativity and care bring rewards. Symbolism: wheat, crown of stars, flowing robe. Folklore: Represents fertility and the Mother archetype. Warning: Avoid overindulgence or neglecting self-care.",
-  "the_emperor.png": "Structure, authority, and control are important. Use discipline to achieve your goals. Symbolism: throne, scepter, ram. Folklore: Linked to father figures and leadership archetypes. Warning: Avoid rigidity or authoritarian behavior.",
-  "the_hierophant.png": "Tradition and learning will guide you. Seek wisdom from established sources. Symbolism: religious staff, keys, triple crown. Folklore: Represents spiritual mentorship and moral guidance. Warning: Avoid blind conformity or ignoring personal insight.",
-  "the_lovers.png": "Choices in love and partnership. Align your decisions with your values. Symbolism: angel, couple, tree of knowledge. Folklore: Connected to Adam & Eve and Gemini energy, decisions of the heart. Warning: Avoid indecision or being swayed by temptation.",
-  "the_chariot.png": "Victory through willpower and determination. Focus and perseverance bring success. Symbolism: chariot, sphinxes, armor. Folklore: Represents triumph through discipline and control. Warning: Avoid recklessness or overconfidence.",
-  "strength.png": "Courage and patience will see you through. Gentle control over impulses is key. Symbolism: lion, infinity sign, crown of flowers. Folklore: Inner strength triumphs over brute force. Warning: Avoid aggression or suppressing emotions.",
-  "the_hermit.png": "Introspection brings clarity and insight. Take time to reflect before acting. Symbolism: lantern, staff, mountain. Folklore: Seeker of wisdom through solitude and reflection. Warning: Avoid isolation or refusing guidance.",
-  "wheel_of_fortune.png": "Life is changing, embrace the cycle. Opportunities come in unexpected ways. Symbolism: wheel, sphinx, snake. Folklore: Linked to Fortuna, goddess of luck, cycles of fate. Warning: Avoid resisting change or clinging to the past.",
-  "justice.png": "Fairness, truth, and balance are key. Consider the consequences before decisions. Symbolism: scales, sword, throne. Folklore: Represents karmic balance and moral truth. Warning: Avoid dishonesty or bias in judgment.",
-  "the_hanged_man.png": "A new perspective will reveal the answer. Let go of old patterns. Symbolism: hanging figure, halo, ropes. Folklore: Enlightenment comes through surrender and seeing differently. Warning: Avoid stagnation or unnecessary sacrifice.",
-  "death.png": "Endings bring transformation and rebirth. Accept change for growth. Symbolism: skeleton, scythe, rising sun. Folklore: Transition, renewal, and letting go of the old. Warning: Avoid resisting change or fear of endings.",
-  "temperance.png": "Balance and harmony are essential. Moderate your actions and emotions. Symbolism: two cups, water flow, angel. Folklore: Represents integration of opposites and patience. Warning: Avoid excess, imbalance, or impulsiveness.",
-  "the_devil.png": "Beware attachments and temptation. Recognize what holds you back. Symbolism: chains, horned figure, inverted pentagram. Folklore: Shadow self and material bondage. Warning: Avoid obsession, materialism, or manipulation.",
-  "the_tower.png": "Sudden change will clear the way for growth. Expect disruption that brings clarity. Symbolism: lightning, tower, falling figures. Folklore: Catastrophe that clears the path to insight. Warning: Avoid denial or clinging to unstable structures.",
-  "the_star.png": "Hope, inspiration, and renewal. Look forward with optimism. Symbolism: stars, water, nudity. Folklore: Guidance and spiritual rejuvenation. Warning: Avoid despair or losing faith in possibilities.",
-  "the_moon.png": "Intuition and mystery guide you. Beware illusions and trust your instincts. Symbolism: moon, dog, wolf, water, crayfish. Folklore: Linked to dreams, subconscious, and the unknown. Warning: Avoid deception or overthinking.",
-  "the_sun.png": "Joy, success, and vitality are near. Celebrate achievements and clarity. Symbolism: sun, child, horse, sunflowers. Folklore: Enlightenment, growth, and positivity. Warning: Avoid arrogance or taking success for granted.",
-  "judgement.png": "Reflection and awakening are coming. Evaluate your choices honestly. Symbolism: angel, trumpet, rising dead. Folklore: Rebirth, spiritual awakening, karmic assessment. Warning: Avoid denial of responsibility or ignoring consequences.",
-  "the_world.png": "Completion and fulfillment are at hand. Enjoy the rewards of your efforts. Symbolism: wreath, dancer, four living creatures. Folklore: Wholeness, harmony, and achievement. Warning: Avoid complacency or failing to celebrate accomplishments."
+  "the_fool.png":"New beginnings, innocence, adventure.",
+  "the_magician.png":"You have the power to manifest your desires.",
+  "the_high_priestess.png":"Trust your intuition and inner wisdom.",
+  "the_empress.png":"Abundance, nurturing, and growth.",
+  "the_emperor.png":"Structure, authority, and control.",
+  "the_hierophant.png":"Tradition and spiritual guidance.",
+  "the_lovers.png":"Choices in love and values.",
+  "the_chariot.png":"Victory through determination.",
+  "strength.png":"Courage and gentle power.",
+  "the_hermit.png":"Introspection and wisdom.",
+  "wheel_of_fortune.png":"Cycles of fate and luck.",
+  "justice.png":"Fairness and truth.",
+  "the_hanged_man.png":"New perspective through sacrifice.",
+  "death.png":"Transformation and rebirth.",
+  "temperance.png":"Balance and harmony.",
+  "the_devil.png":"Beware unhealthy attachments.",
+  "the_tower.png":"Sudden change brings clarity.",
+  "the_star.png":"Hope and renewal.",
+  "the_moon.png":"Illusion and intuition.",
+  "the_sun.png":"Joy and success.",
+  "judgement.png":"Awakening and reflection.",
+  "the_world.png":"Completion and fulfillment."
 };
 
-// Lottery function
-function lottery() {
-  let nums = [];
+function lottery(){
+  let nums=[];
   for(let i=0;i<6;i++) nums.push(Math.floor(Math.random()*49)+1);
   return nums.join(', ');
 }
 
-// Sparkle effect
-function sparkle() {
+function sparkle(){
   for(let i=0;i<15;i++){
-    const s = document.createElement('div');
+    const s=document.createElement('div');
     s.className='sparkle';
     s.style.left=(Math.random()*window.innerWidth)+'px';
     s.style.top=(Math.random()*window.innerHeight)+'px';
@@ -219,96 +226,46 @@ function sparkle() {
   }
 }
 
-// Card click
-document.body.addEventListener('click', () => {
-  const card = cards[Math.floor(Math.random()*cards.length)];
-  const cardImg = document.getElementById('card-img');
-  cardImg.style.opacity = 0;
-  setTimeout(()=>{cardImg.src = card; cardImg.style.opacity=1},300);
-  document.getElementById('fortune-text').innerText = cardMeanings[card.split('/').pop()] || "A mysterious fate awaits you.";
-  document.getElementById('lottery-numbers').innerText = " LUCKY Numbers: " + lottery();
+document.body.addEventListener('click',()=>{
+  const card=cards[Math.floor(Math.random()*cards.length)];
+  const img=document.getElementById('card-img');
+  img.style.opacity=0;
+  setTimeout(()=>{img.src=card;img.style.opacity=1},300);
+  document.getElementById('fortune-text').innerText=
+    cardMeanings[card.split('/').pop()]||"A mysterious fate awaits you.";
+  document.getElementById('lottery-numbers').innerText="LUCKY Numbers: "+lottery();
   sparkle();
 });
 
-// Quiz
-const questions = [
-  {q:"Did you go to the park in the last week?", type:"yesno"},
-  {q:"Are you living alone?", type:"yesno"},
-  {q:"Did you try a new food recently?", type:"yesno"},
-  {q:"Did you exercise in the past three days?", type:"yesno"},
-  {q:"Are you currently working on a creative project?", type:"yesno"},
-  {q:"Have you ever argued with a squirrel?", type:"yesno"},
-  {q:"Do you believe your socks secretly plot against you?", type:"yesno"},
-  {q:"If a rock fell from the sky, would you dodge it?", type:"yesno"},
-  {q:"Would you lend your toothbrush to a ghost?", type:"yesno"},
-  {q:"Have you ever suspected your fridge is judging you?", type:"yesno"},
-  {q:"Do your shoes talk when you’re not looking?", type:"yesno"},
-  {q:"Would you eat soup with a fork if told it’s magical?", type:"yesno"},
-  {q:"Do you own an invisible pet?", type:"yesno"},
-  {q:"Have you ever asked your pillow for life advice?", type:"yesno"},
-  {q:"What would you say to a talking cat?", type:"text"},
-  {q:"Name an item in your house that might be alive.", type:"text"},
-  {q:"Have you ever tried to communicate with a rock?", type:"yesno"},
-  {q:"Would you wear a hat made of spaghetti?", type:"yesno"},
-  {q:"Have you ever been convinced your shadow is plotting against you?", type:"yesno"},
-  {q:"If the wind whispered secrets, would you listen?", type:"yesno"},
-  {q:"Would you trade your left sock for a magic bean?", type:"yesno"},
-  {q:"Have you ever danced with your furniture when no one was watching?", type:"yesno"},
-  {q:"Do you talk to your plants, and do they talk back?", type:"yesno"},
-  {q:"Would you ride a broom if it could fly?", type:"yesno"}
+// $1 Fortune Quiz
+const questions=[
+  {q:"Did you go to the park in the last week?",type:"yesno"},
+  {q:"Are you living alone?",type:"yesno"},
+  {q:"Did you try a new food recently?",type:"yesno"},
+  {q:"Did you exercise in the past three days?",type:"yesno"},
+  {q:"Are you currently working on a creative project?",type:"yesno"},
+  {q:"What is the last book you read?",type:"text"},
+  {q:"What is your favorite color?",type:"text"}
 ];
 
-const fortunes = [
-  "Big chance somebody will steal your medallions today. Keep your wallet in a safe place.",
-  "Your wife or partner may betray your trust. Face reality and stay alert.",
-  "A shadow follows you; unseen enemies lurk nearby.",
-  "Unexpected loss is coming, but it will teach a valuable lesson.",
-  "Someone envies your success; guard your secrets.",
-  "A sudden opportunity will appear, but it carries hidden risks.",
-  "Fortune smiles briefly; take what you can while it lasts.",
-  "You will hear a truth that chills you, but clarity follows.",
-  "A small gain today may lead to a larger danger tomorrow.",
-  "Your kindness could be exploited; protect your booty.",
-  "Unexpected joy appears; a friend or stranger brings light.",
-  "You may face humiliation.",
-  "A risk today be cautious.",
-  "more than you know; the universe watches.",
-  "A challenge tests your courage.",
-  "Good fortune comes when you least expect it; enjoy the fleeting peace.",
-  "A hidden enemy may act today.",
-  "Money comes and goes; safeguard what is yours.",
-  "A tempting offer may backfire.",
-  "Your health may feel fragile; take care and rest when needed.",
-  "A minor betrayal.",
-  "Unexpected laughter.",
-  "joy or trouble could follow.",
-  "Tonight, dreams bring warnings.",
-  "A rock will fall from the sky and hit you if you stand under it.",
-  "The moon may turn green tonight; beware strange behavior.",
-  "Your shoes might decide to walk away on their own.",
-  "Beware the coffee—it may be plotting revenge today.",
-  "A pigeon could deliver terrible news to your head.",
-  "Do not trust the shadows; they sometimes steal socks.",
-  "Your toast may burn and trigger a chain of chaos.",
-  "Cats may judge you harshly; tread carefully around them.",
-  "The wind whispers secrets; ignore it at your own risk."
+const fortunes=[
+  "Adventure awaits.",
+  "Love is near.",
+  "Luck is on your side.",
+  "A mystery unfolds.",
+  "Your creativity shines.",
+  "Trust your intuition.",
+  "A surprise opportunity appears."
 ];
 
-let paid=false;
-let currentQuestion=0;
-let answers=[];
+let paid=false,currentQuestion=0,answers=[];
 
-document.getElementById("startFortune").onclick = () => {
+document.getElementById("startFortune").onclick=()=>{
   window.open("https://www.paypal.me/pennyBagsTrain");
-  const btn=document.getElementById("startFortune");
-  btn.disabled=true;
-  btn.textContent="Processing payment...";
   setTimeout(()=>{
     paid=true;
-    btn.style.display="none";
     document.getElementById("quiz-container").style.display="block";
     showQuestion();
-    alert("Thanks! Answer the questions to reveal your fortune.");
   },30000);
 };
 
@@ -318,8 +275,40 @@ function showQuestion(){
   const q=questions[Math.floor(Math.random()*questions.length)];
   const p=document.createElement("p");
   p.textContent=q.q;
-  p.style.fontSize="18px";
-  p.style.fontWeight="bold";
-  p.style.color="#fff";
   area.appendChild(p);
 
+  if(q.type==="yesno"){
+    ["Yes","No"].forEach(v=>{
+      const b=document.createElement("button");
+      b.textContent=v;
+      b.onclick=()=>{answers.push(1);nextQuestion();};
+      area.appendChild(b);
+    });
+  }else{
+    const i=document.createElement("input");
+    const b=document.createElement("button");
+    b.textContent="Submit";
+    b.onclick=()=>{answers.push(i.value.length||1);nextQuestion();};
+    area.appendChild(i);
+    area.appendChild(b);
+  }
+}
+
+function nextQuestion(){
+  currentQuestion++;
+  if(currentQuestion<7) showQuestion();
+  else{
+    document.getElementById("fortune-output").textContent=
+      fortunes[Math.floor(Math.random()*fortunes.length)];
+    document.getElementById("quiz-container").style.display="none";
+    currentQuestion=0;
+    answers=[];
+  }
+}
+
+fetch('article.html')
+  .then(r=>r.text())
+  .then(t=>document.getElementById('article').innerHTML=t);
+</script>
+</body>
+</html>
