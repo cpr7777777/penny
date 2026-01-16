@@ -5,131 +5,135 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🔮 Fortune Lottery</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    background: #0b0c27;
-    position: relative;
-    min-height: 100vh;
-  }
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #0b0c27;
+  position: relative;
+  min-height: 100vh;
+}
 
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="white"/><circle cx="50" cy="80" r="0.5" fill="white"/><circle cx="100" cy="20" r="1" fill="white"/><circle cx="200" cy="60" r="0.8" fill="white"/><circle cx="300" cy="150" r="0.6" fill="white"/><circle cx="400" cy="30" r="0.7" fill="white"/><circle cx="500" cy="200" r="0.5" fill="white"/><circle cx="600" cy="120" r="0.6" fill="white"/></svg>') repeat;
-    animation: moveStars 30s linear infinite;
-    z-index: -1;
-  }
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="white"/><circle cx="50" cy="80" r="0.5" fill="white"/><circle cx="100" cy="20" r="1" fill="white"/><circle cx="200" cy="60" r="0.8" fill="white"/><circle cx="300" cy="150" r="0.6" fill="white"/><circle cx="400" cy="30" r="0.7" fill="white"/><circle cx="500" cy="200" r="0.5" fill="white"/><circle cx="600" cy="120" r="0.6" fill="white"/></svg>') repeat;
+  animation: moveStars 30s linear infinite;
+  z-index: -1;
+}
 
-  @keyframes moveStars {
-    from {background-position: 0 0;}
-    to {background-position: -1000px 1000px;}
-  }
+@keyframes moveStars {
+  from {background-position: 0 0;}
+  to {background-position: -1000px 1000px;}
+}
 
-  h1 {
-    margin: 20px 0 30px 0;
-    color: #fff;
-  }
+h1 { margin: 20px 0 30px 0; color: #fff; }
 
-  #card-img {
-    max-width: 200px;
-    margin-top: 20px;
-    display: block;
-    border-radius: 8px;
-    box-shadow: 0 0 10px #000;
-    opacity: 0;
-    transition: opacity 1s ease;
-    margin-left: auto;
-    margin-right: auto;
-  }
+#card-img {
+  max-width: 200px;
+  margin-top: 20px;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #000;
+  opacity: 0;
+  transition: opacity 1s ease;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  #fortune-text, #lottery-numbers {
-    margin-top: 10px;
-    font-size: 1.1rem;
-    color: #fff;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    line-height: 1.4;
-  }
+#fortune-text, #lottery-numbers {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #fff;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  line-height: 1.4;
+}
 
-  .sparkle {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    background: white;
-    border-radius: 50%;
-    opacity: 0;
-  }
+.sparkle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+}
 
-  #article {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 20px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 10px;
-    color: #fff;
-    text-align: left;
-  }
+#article {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  color: #fff;
+  text-align: left;
+}
 
-  /* Quiz styling */
-  #quiz-container p {
-    color: #fff; /* make questions visible */
-    font-size: 18px;
-    letter-spacing: 1px;
-    text-shadow: 1px 1px 2px black;
-  }
+/* Quiz styling */
+#quiz-container p {
+  color: #fff;
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px black;
+}
 
-  #quiz-container input[type="text"] {
-    color: black; /* typing color */
-    font-size: 16px;
-    padding: 6px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    width: 250px;
-    text-align: center;
-    background: #fff; /* visible background */
-    border: 1px solid #000;
-    border-radius: 5px;
-    caret-color: red;
-    position: relative;
-  }
+#quiz-container input[type="text"] {
+  color: black;
+  font-size: 16px;
+  padding: 6px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  width: 250px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 5px;
+  caret-color: red;
+}
 
-  #quiz-container button {
-    padding: 12px 20px;
-    font-size: 16px;
-    margin: 5px;
-    background: #ffd700; /* gold background */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    color: black; /* visible text */
-    font-weight: bold;
-  }
+#quiz-container button {
+  padding: 12px 20px;
+  font-size: 16px;
+  margin: 5px;
+  background: #ffd700;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+}
 
-  #fortune-output {
-    color: #8B0000; /* dark red */
-    font-weight: bold;
-    font-size: 18px;
-    margin-top: 15px;
-    text-shadow: 1px 1px 2px black;
-  }
+#fortune-output {
+  color: #8B0000;
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 15px;
+  text-shadow: 1px 1px 2px black;
+}
 
-  #fortune-section button {
-    padding: 15px 25px;
-    font-size: 18px;
-    background: #ffd700;
-    color: black;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+#fortune-section button {
+  padding: 15px 25px;
+  font-size: 18px;
+  background: #ffd700;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Scratch ticket */
+#scratch-result {
+  color:#8B0000;
+  font-weight:bold;
+  font-size:16px;
+  margin-top:10px;
+}
 </style>
 </head>
 <body>
@@ -151,12 +155,19 @@
 <div id="fortune-output" style="text-align:center;"></div>
 <div id="article"></div>
 
+<!-- Scratch Ticket -->
+<div id="scratch-container" style="text-align:center; margin:40px 0;">
+  <p style="color:#fff; font-size:18px;">🎟️ Scratch Your Luck!</p>
+  <canvas id="scratch-canvas" width="300" height="100" style="border:2px solid #fff; cursor:pointer;"></canvas>
+  <p id="scratch-result"></p>
+</div>
+
 <audio id="bg-music" loop>
   <source src="magic.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// MUSIC START
+// MUSIC
 let musicStarted = false;
 document.addEventListener('click', () => {
   if (!musicStarted) {
@@ -167,7 +178,7 @@ document.addEventListener('click', () => {
   }
 });
 
-// Card functionality
+// Tarot cards
 const cards = [
   "cards/the_fool.png","cards/the_magician.png","cards/the_high_priestess.png","cards/the_empress.png","cards/the_emperor.png",
   "cards/the_hierophant.png","cards/the_lovers.png","cards/the_chariot.png","cards/strength.png","cards/the_hermit.png",
@@ -229,7 +240,7 @@ document.body.addEventListener('click',()=>{
   sparkle();
 });
 
-// Pool of questions
+// Quiz
 const questionPool = [
   {q:"Do shadows whisper your name?", type:"yesno"},
   {q:"Have you ever seen a cat dance at midnight?", type:"yesno"},
@@ -334,10 +345,54 @@ function nextQuestion(){
   }
 }
 
+// Scratch ticket
+const canvas = document.getElementById('scratch-canvas');
+const ctx = canvas.getContext('2d');
+ctx.fillStyle = '#888';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.globalCompositeOperation = 'destination-out';
+let isDrawing = false;
+canvas.addEventListener('mousedown', ()=>{isDrawing=true;});
+canvas.addEventListener('mouseup', ()=>{isDrawing=false; checkScratch();});
+canvas.addEventListener('mouseleave', ()=>{isDrawing=false;});
+canvas.addEventListener('mousemove', (e)=>{
+  if(!isDrawing) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  ctx.beginPath();
+  ctx.arc(x,y,15,0,Math.PI*2);
+  ctx.fill();
+});
+
+function checkScratch(){
+  const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+  let pixels = imageData.data;
+  let transparentPixels = 0;
+  for(let i=3;i<pixels.length;i+=4){
+    if(pixels[i] < 128) transparentPixels++;
+  }
+  if(transparentPixels > pixels.length*0.6){
+    document.getElementById('scratch-result').textContent = getPrize();
+  }
+}
+
+function getPrize(){
+  const prizes = [
+    "🎉 You win 10 lucky numbers!",
+    "🍀 Free fortune!",
+    "💎 You unlocked a secret card!",
+    "✨ Surprise! Your toast will land butter-side up!",
+    "🃏 Minor mischief awaits…"
+  ];
+  return prizes[Math.floor(Math.random()*prizes.length)];
+}
+
 // Load article
 fetch('article.html')
   .then(r=>r.text())
   .then(t=>document.getElementById('article').innerHTML=t);
+
 </script>
 </body>
 </html>
