@@ -78,10 +78,41 @@
     text-align: left;
   }
 
-  #quiz-container p,
-  #quiz-container input,
-  #quiz-container button {
-    color: #fff;
+  /* Weird quiz question text */
+  #quiz-container p {
+    color: black;
+    font-size: 18px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 1px #000;
+  }
+
+  /* Glitchy input */
+  #quiz-container input[type="text"] {
+    color: black;
+    font-size: 16px;
+    padding: 6px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 250px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 5px;
+    caret-color: red;
+    position: relative;
+  }
+
+  .glitch-letter {
+    display: inline-block;
+    animation: jitter 0.1s infinite alternate;
+  }
+
+  @keyframes jitter {
+    0% { transform: translate(0,0) rotate(0deg); }
+    25% { transform: translate(-1px,1px) rotate(-2deg); }
+    50% { transform: translate(1px,-1px) rotate(2deg); }
+    75% { transform: translate(-1px,0px) rotate(1deg); }
+    100% { transform: translate(1px,1px) rotate(-1deg); }
   }
 
   #quiz-container button {
@@ -89,29 +120,18 @@
     font-size: 16px;
     margin: 5px;
     background: #333;
-    border: 1px solid #fff;
+    border: 1px solid #000;
     border-radius: 5px;
     cursor: pointer;
-  }
-
-  #quiz-container input[type="text"] {
-    font-size: 16px;
-    padding: 6px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    width: 250px;
-    text-align: center;
-    background: #0b0c27;
-    border: 1px solid #fff;
-    border-radius: 5px;
-    color: #fff;
+    color: black;
   }
 
   #fortune-output {
-    color: #fff;
+    color: #8B0000; /* dark red */
     font-weight: bold;
     font-size: 18px;
     margin-top: 15px;
+    text-shadow: 1px 1px 2px black;
   }
 
   #fortune-section button {
@@ -122,7 +142,7 @@
 </head>
 <body>
 
-<h1>🎴 Fortune 🎴</h1>
+<h1>🎴 Gypsy Fortune 🎴</h1>
 
 <img id="card-img" src="" alt="Your card will appear here">
 <p id="fortune-text"></p>
@@ -145,7 +165,7 @@
 </audio>
 
 <script>
-// 🎵 MUSIC START
+// MUSIC START
 let musicStarted = false;
 document.addEventListener('click', () => {
   if (!musicStarted) {
@@ -218,43 +238,42 @@ document.body.addEventListener('click',()=>{
   sparkle();
 });
 
-// $1 Fortune Quiz
-const questions=[
-  {q:"Did you go to the park in the last week?",type:"yesno"},
-  {q:"Are you living alone?",type:"yesno"},
-  {q:"Did you try a new food recently?",type:"yesno"},
-  {q:"Did you exercise in the past three days?",type:"yesno"},
-  {q:"Are you currently working on a creative project?",type:"yesno"},
-  {q:"What is the last book you read?",type:"text"},
-  {q:"What is your favorite color?",type:"text"}
+// Pool of questions
+const questionPool = [
+  {q:"Do shadows whisper your name?", type:"yesno"},
+  {q:"Have you ever seen a cat dance at midnight?", type:"yesno"},
+  {q:"If the moon melts, will you cry?", type:"yesno"},
+  {q:"Pick a number that doesn’t exist:", type:"text"},
+  {q:"What color is your invisible friend?", type:"text"},
+  {q:"Write the sound of silence:", type:"text"},
+  {q:"Your toast will land butter-side down… how dramatic?", type:"text"},
+  {q:"Someone waved at you… but it wasn’t meant for you, did you panic?", type:"yesno"},
+  {q:"You will confidently say something profound… and immediately forget it.", type:"text"},
+  {q:"Your coffee is slightly too hot… what do you do?", type:"text"},
+  {q:"You will attempt a heroic pose… and trip over your own shadow.", type:"yesno"},
+  {q:"Your favorite pen vanished… what’s your reaction?", type:"text"},
+  {q:"Your left sock declares independence… will you negotiate?", type:"yesno"},
+  {q:"You will sneeze at the worst possible moment… how do you recover?", type:"text"}
 ];
 
-const fortunes=[
-  "Adventure awaits.",
-  "Love is near.",
-  "Luck is on your side.",
-  "A mystery unfolds.",
-  "Your creativity shines.",
-  "Trust your intuition.",
-  "A surprise opportunity appears."
-];
+let paid=false;
+let currentQuestions = [];
+let currentQuestionIndex = 0;
+let answers=[];
 
-let paid=false,currentQuestion=0,answers=[];
-
-// $1 Fortune button: change text to "Processing payment..."
+// $1 Fortune button
 document.getElementById("startFortune").onclick = () => {
-  // Open PayPal
   window.open("https://www.paypal.me/pennyBagsTrain");
-
   const btn = document.getElementById("startFortune");
   btn.textContent = "Processing payment...";
   btn.disabled = true;
 
   setTimeout(() => {
     paid = true;
+    currentQuestions = questionPool.sort(() => 0.5 - Math.random()).slice(0,7);
+    currentQuestionIndex = 0;
     document.getElementById("quiz-container").style.display = "block";
     showQuestion();
-
     btn.textContent = "$1 Fortune";
     btn.disabled = false;
   }, 30000);
@@ -263,9 +282,9 @@ document.getElementById("startFortune").onclick = () => {
 function showQuestion(){
   const area=document.getElementById("question-area");
   area.innerHTML="";
-  const q=questions[Math.floor(Math.random()*questions.length)];
+  const q = currentQuestions[currentQuestionIndex];
   const p=document.createElement("p");
-  p.textContent=q.q;
+  p.textContent = q.q;
   area.appendChild(p);
 
   if(q.type==="yesno"){
@@ -277,22 +296,45 @@ function showQuestion(){
     });
   }else{
     const i=document.createElement("input");
+    i.type = "text";
     const b=document.createElement("button");
     b.textContent="Submit";
     b.onclick=()=>{answers.push(i.value.length||1);nextQuestion();};
     area.appendChild(i);
     area.appendChild(b);
+
+    // Glitchy typing
+    i.addEventListener('input', ()=> {
+      let val = i.value.split('').map(c => Math.random()<0.1 ? ['$', '%','#','@','!','?','*','∆','◊','¥'][Math.floor(Math.random()*10)] : c).join('');
+      i.value = val;
+    });
   }
 }
 
 function nextQuestion(){
-  currentQuestion++;
-  if(currentQuestion<7) showQuestion();
+  currentQuestionIndex++;
+  if(currentQuestionIndex < currentQuestions.length) showQuestion();
   else{
-    document.getElementById("fortune-output").textContent=
+    const fortunes = [
+      "You will sneeze at the exact wrong moment and ruin a very important plan.",
+      "Someone will wave at you… but it wasn’t meant for you, and you’ll look stupid.",
+      "Your toast will land butter-side down in front of your most judgmental friend.",
+      "You will confidently say something profound… and immediately forget it.",
+      "The coffee you need most will be slightly too hot and will scald your tongue.",
+      "You will sit down to relax… only to realize you’ve been on the wrong Zoom call for 10 minutes.",
+      "Your favorite pen will vanish into a mysterious void right when you need it.",
+      "You will try to wink, but accidentally blink both eyes… in front of everyone.",
+      "Your socks will mysteriously disappear, leaving you with mismatched chaos.",
+      "You will attempt a heroic pose… and trip over your own shadow.",
+      "Your alarm will go off… but only in the nightmares you wish you were still asleep from.",
+      "You will tell a joke that seemed funny in your head… and silence will respond.",
+      "Your bag will fall open in public… revealing the weirdest items you forgot you owned.",
+      "You will confidently walk into a room… only to forget why you were there.",
+      "Your favorite chair will betray you by squeaking at the exact wrong moment."
+    ];
+    document.getElementById("fortune-output").textContent =
       fortunes[Math.floor(Math.random()*fortunes.length)];
     document.getElementById("quiz-container").style.display="none";
-    currentQuestion=0;
     answers=[];
   }
 }
