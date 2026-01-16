@@ -158,13 +158,12 @@
 <div id="fortune-output" style="text-align:center;"></div>
 <div id="article"></div>
 
-<!-- 🎵 BACKGROUND MUSIC (ADDED ONLY) -->
 <audio id="bg-music" loop>
   <source src="magic.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// 🎵 MUSIC START (ADDED ONLY)
+// 🎵 MUSIC START
 let musicStarted = false;
 document.addEventListener('click', () => {
   if (!musicStarted) {
@@ -260,13 +259,28 @@ const fortunes=[
 
 let paid=false,currentQuestion=0,answers=[];
 
-document.getElementById("startFortune").onclick=()=>{
-  window.open("https://www.paypal.me/pennyBagsTrain");
-  setTimeout(()=>{
-    paid=true;
-    document.getElementById("quiz-container").style.display="block";
-    showQuestion();
-  },30000);
+// Updated $1 Fortune click handler: countdown starts after opening PayPal
+document.getElementById("startFortune").onclick = () => {
+  const paypalWindow = window.open("https://www.paypal.me/pennyBagsTrain");
+
+  // Start 30s countdown only after opening PayPal
+  setTimeout(() => {
+    const output = document.getElementById("fortune-output");
+    let countdown = 30;
+    output.textContent = `Processing payment... ${countdown}s`;
+
+    const timer = setInterval(() => {
+      countdown--;
+      output.textContent = `Processing payment... ${countdown}s`;
+      if (countdown <= 0) {
+        clearInterval(timer);
+        output.textContent = ""; // Clear countdown
+        paid = true;
+        document.getElementById("quiz-container").style.display = "block";
+        showQuestion();
+      }
+    }, 1000);
+  }, 1000); // 1s delay to ensure PayPal opened
 };
 
 function showQuestion(){
@@ -306,6 +320,7 @@ function nextQuestion(){
   }
 }
 
+// Load article
 fetch('article.html')
   .then(r=>r.text())
   .then(t=>document.getElementById('article').innerHTML=t);
