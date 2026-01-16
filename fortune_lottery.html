@@ -31,23 +31,6 @@
     to {background-position: -1000px 1000px;}
   }
 
-  #donate-top {
-    position: sticky;
-    top: 0;
-    background: #0b0c27;
-    padding: 20px 0;
-    z-index: 1000;
-  }
-
-  #donate-top button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    border-radius: 5px;
-    background: #ffd700;
-    border: none;
-    cursor: pointer;
-  }
-
   h1 {
     margin: 20px 0 30px 0;
     color: #fff;
@@ -130,24 +113,23 @@
     font-size: 18px;
     margin-top: 15px;
   }
+
+  #fortune-section button {
+    padding: 15px 25px;
+    font-size: 18px;
+  }
 </style>
 </head>
 <body>
 
-<div id="donate-top">
-  <a href="https://www.paypal.me/pennyBagsTrain" target="_blank">
-    <button> Tip's for Luck</button>
-  </a>
-</div>
-
-<h1>🎴 Gypsy Fortune 🎴</h1>
+<h1>🎴 Fortune 🎴</h1>
 
 <img id="card-img" src="" alt="Your card will appear here">
 <p id="fortune-text"></p>
 <p id="lottery-numbers"></p>
 
 <div id="fortune-section" style="text-align:center; margin:20px 0;">
-  <button id="startFortune" style="padding:15px 25px; font-size:18px;">$1 Fortune</button>
+  <button id="startFortune">$1 Fortune</button>
 </div>
 
 <div id="quiz-container" style="display:none; text-align:center; margin-top:10px;">
@@ -259,28 +241,23 @@ const fortunes=[
 
 let paid=false,currentQuestion=0,answers=[];
 
-// Updated $1 Fortune click handler: countdown starts after opening PayPal
+// $1 Fortune button: change text to "Processing payment..."
 document.getElementById("startFortune").onclick = () => {
-  const paypalWindow = window.open("https://www.paypal.me/pennyBagsTrain");
+  // Open PayPal
+  window.open("https://www.paypal.me/pennyBagsTrain");
 
-  // Start 30s countdown only after opening PayPal
+  const btn = document.getElementById("startFortune");
+  btn.textContent = "Processing payment...";
+  btn.disabled = true;
+
   setTimeout(() => {
-    const output = document.getElementById("fortune-output");
-    let countdown = 30;
-    output.textContent = `Processing payment... ${countdown}s`;
+    paid = true;
+    document.getElementById("quiz-container").style.display = "block";
+    showQuestion();
 
-    const timer = setInterval(() => {
-      countdown--;
-      output.textContent = `Processing payment... ${countdown}s`;
-      if (countdown <= 0) {
-        clearInterval(timer);
-        output.textContent = ""; // Clear countdown
-        paid = true;
-        document.getElementById("quiz-container").style.display = "block";
-        showQuestion();
-      }
-    }, 1000);
-  }, 1000); // 1s delay to ensure PayPal opened
+    btn.textContent = "$1 Fortune";
+    btn.disabled = false;
+  }, 30000);
 };
 
 function showQuestion(){
