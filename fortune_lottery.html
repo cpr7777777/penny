@@ -78,52 +78,39 @@
     text-align: left;
   }
 
-  /* Weird quiz question text */
+  /* Quiz styling */
   #quiz-container p {
-    color: black;
+    color: #fff; /* make questions visible */
     font-size: 18px;
-    letter-spacing: 2px;
-    text-shadow: 0 0 1px #000;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px black;
   }
 
-  /* Glitchy input */
   #quiz-container input[type="text"] {
-    color: black;
+    color: black; /* typing color */
     font-size: 16px;
     padding: 6px;
     margin-top: 5px;
     margin-bottom: 10px;
     width: 250px;
     text-align: center;
-    background: #fff;
+    background: #fff; /* visible background */
     border: 1px solid #000;
     border-radius: 5px;
     caret-color: red;
     position: relative;
   }
 
-  .glitch-letter {
-    display: inline-block;
-    animation: jitter 0.1s infinite alternate;
-  }
-
-  @keyframes jitter {
-    0% { transform: translate(0,0) rotate(0deg); }
-    25% { transform: translate(-1px,1px) rotate(-2deg); }
-    50% { transform: translate(1px,-1px) rotate(2deg); }
-    75% { transform: translate(-1px,0px) rotate(1deg); }
-    100% { transform: translate(1px,1px) rotate(-1deg); }
-  }
-
   #quiz-container button {
     padding: 12px 20px;
     font-size: 16px;
     margin: 5px;
-    background: #333;
-    border: 1px solid #000;
+    background: #ffd700; /* gold background */
+    border: none;
     border-radius: 5px;
     cursor: pointer;
-    color: black;
+    color: black; /* visible text */
+    font-weight: bold;
   }
 
   #fortune-output {
@@ -137,6 +124,11 @@
   #fortune-section button {
     padding: 15px 25px;
     font-size: 18px;
+    background: #ffd700;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -154,7 +146,6 @@
 
 <div id="quiz-container" style="display:none; text-align:center; margin-top:10px;">
   <div id="question-area"></div>
-  <button id="next-question" style="padding:12px 20px; font-size:16px; margin-top:10px; display:none;">Next</button>
 </div>
 
 <div id="fortune-output" style="text-align:center;"></div>
@@ -266,6 +257,8 @@ document.getElementById("startFortune").onclick = () => {
   window.open("https://www.paypal.me/pennyBagsTrain");
   const btn = document.getElementById("startFortune");
   btn.textContent = "Processing payment...";
+  btn.style.color = "black";
+  btn.style.background = "#ffd700";
   btn.disabled = true;
 
   setTimeout(() => {
@@ -276,6 +269,8 @@ document.getElementById("startFortune").onclick = () => {
     showQuestion();
     btn.textContent = "$1 Fortune";
     btn.disabled = false;
+    btn.style.color = "black";
+    btn.style.background = "#ffd700";
   }, 30000);
 };
 
